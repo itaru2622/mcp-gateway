@@ -18,7 +18,10 @@ import yaml
 import json
 import argparse
 import sys
+import asyncio
 
+#import logging
+#logging.basicConfig(level=logging.DEBUG) # Configure root logger
 
 def load(path:str='/dev/stdin') -> Any:
     """load json/yaml from file"""
@@ -31,6 +34,12 @@ def load(path:str='/dev/stdin') -> Any:
             d = yaml.safe_load(c)
         return d
 
+async def test(cli, uri) -> Any:
+    rtn = await cli.get(uri)
+    rtn = rtn.json()
+    rtn = json.dumps(rtn, indent=2, ensure_ascii=False)
+    print(f'{rtn}', file=sys.stderr)
+
 
 if __name__ == '__main__':
 
@@ -38,31 +47,34 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--spec',      help='OpenAPI spec file for gateway (json/yaml)', default='/dev/stdin')
     parser.add_argument('-b', '--baseURL',   help='baseURL to REST Server',                    default='')
     parser.add_argument('-a', '--token',     help='bearer token to REST server',               default=None)
-    parser.add_argument('-t', '--transport', help='MCP server transport',                      default='stdio')
+    parser.add_argument('-t', '--transport', help='MCP server transport',                      default='http')
     parser.add_argument('-p', '--port',      help='MCP server port',                           default=8888)
     parser.add_argument('-H', '--host',      help='MCP server host to listen',                 default='0.0.0.0')
+    parser.add_argument('-l', '--path',      help='MCP server path to bind',                   default='/mcp')
+    parser.add_argument('-d', '--log_level', help='MCP server log level',                      default='DEBUG')
     opts = parser.parse_args()
 
     opts.headers = {}
 
     if opts.token not in [None, '']:
-         opts.headers.update(Authorization=f'Bearer {opts.token}')
+         opts.headers.update(Authorization=f'bearer {opts.token}')
     print(f"opts: ########### {opts}", file=sys.stderr)
-#   exit(0)
+
+    #exit(0)
     
-    route_maps=[RouteMap(mcp_type=MCPType.TOOL)] # all routes as tool
     spec = load(opts.spec)
 
     # cli to access REST Server.
-    cli = httpx.AsyncClient()
-    #cli = httpx.AsyncClient(base_url=opts.baseURL, headers=opts.headers ) # cli to REST Server.
+    cli = httpx.AsyncClient(base_url=opts.baseURL, headers=opts.headers ) # cli to REST Server.
 
-    mcp = FastMCP.from_openapi(spec, client=cli, route_maps=route_maps)
+    #asyncio.run( test( cli, "/orgs/..."))
+    #exit(0)
+
+    mcp = FastMCP.from_openapi(spec, client=cli)
 
     kwargs = dict(transport=opts.transport)
     if opts.transport not in ['stdio']:
-      kwargs = { k : opts['k']   for k in ['host', 'port', 'transport' ] }
+        kwargs = { k : v  for k, v in vars(opts).items() if k in ['host', 'port', 'path', 'transport', 'log_level' ] }
 
     print(f"{kwargs=}", file=sys.stderr)
-    #mcp.run(**kwargs) # not yet...
-    exit(0)
+    mcp.run(**kwargs)
