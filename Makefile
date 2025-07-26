@@ -41,7 +41,7 @@ start: docker-net-start
 stop::
 	wDir=${wDir} ALLOWED_ORIGINS=${ALLOWED_ORIGINS} \
 	docker compose -f ./docker-compose.yaml down -v
-stop::  docker-network-stop
+stop::  docker-net-stop
 
 docker-net-start:
 	-docker network create ${docker_network}
