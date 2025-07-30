@@ -20,6 +20,7 @@ services:
     image: itaru2622/mcp:bookworm
     ports:
       - 8888:8888
+      - 8889:8889
     environment:
       - FASTMCP_EXPERIMENTAL_ENABLE_NEW_OPENAPI_PARSER=true
     volumes:
