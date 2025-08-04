@@ -87,7 +87,8 @@ if __name__ == '__main__':
     ]
 
     mcp = FastMCP.from_openapi(spec, client=cli, route_maps=route_maps)
-#   mcp.add_middleware(LoggingMiddleware())
+    logger = get_logger('fastmcp.server.middleware.logging.LoggingMiddleware').setLevel(logging.DEBUG)
+    mcp.add_middleware(LoggingMiddleware(logger=logger, log_level=logging.WARNING))
 
     kwargs = dict(transport=opts.transport)
     if opts.transport not in ['stdio']:
