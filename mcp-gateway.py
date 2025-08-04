@@ -23,10 +23,12 @@ import asyncio
 import logging
 from fastmcp.server.middleware.logging import LoggingMiddleware
 from fastmcp.utilities.logging import get_logger
+from FullRelayMiddleware import FullRelayMiddleware
 
 for comp in [ "fastmcp.experimental.utilities.openapi.director",
               "fastmcp.experimental.server.openapi.components",
-              "fastmcp.experimental.server.openapi.server" ]:
+              "fastmcp.experimental.server.openapi.server",
+              "FullRelayMiddleware"]:
     get_logger(comp).setLevel(logging.DEBUG)
 
 #logging.basicConfig(level=logging.DEBUG) # Configure root logger
@@ -87,8 +89,14 @@ if __name__ == '__main__':
     ]
 
     mcp = FastMCP.from_openapi(spec, client=cli, route_maps=route_maps)
-    logger = get_logger('fastmcp.server.middleware.logging.LoggingMiddleware').setLevel(logging.DEBUG)
-    mcp.add_middleware(LoggingMiddleware(logger=logger, log_level=logging.WARNING))
+
+
+    mcp.add_middleware(FullRelayMiddleware())
+    '''
+    logger = get_logger('fastmcp.server.middleware.logging.LoggingMiddleware')
+    logger.setLevel(logging.DEBUG)
+    mcp.add_middleware(LoggingMiddleware(logger=logger, log_level=logging.DEBUG))
+    '''
 
     kwargs = dict(transport=opts.transport)
     if opts.transport not in ['stdio']:
