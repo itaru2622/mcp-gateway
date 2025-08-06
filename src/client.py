@@ -19,30 +19,8 @@ import asyncio
 import logging
 from fastmcp.utilities.logging import get_logger
 from collections import defaultdict
-
-for comp in [ "fastmcp.experimental.utilities.openapi.director",
-              "fastmcp.experimental.server.openapi.components",
-              "fastmcp.experimental.server.openapi.server" ]:
-    get_logger(comp).setLevel(logging.DEBUG)
-
-#logging.basicConfig(level=logging.DEBUG) # Configure root logger
-
-
-def load(path:str='/dev/stdin') -> Any:
-    """load json|yaml|text(url) from file"""
-
-    with open(path, "r", encoding='utf-8') as fp:
-        c = fp.read() # read as text
-
-        for loader in [ json.loads, yaml.safe_load ]:
-        # for each supporting format
-            try:
-                d = loader(c)
-                return d
-            except Exception as e:
-                continue
-        return c
-
+# my own ...
+from utils import load
 
 
 async def test(cli) -> Any:
@@ -73,7 +51,12 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--log_level', help='MCP log level',                      default='DEBUG')
     opts = parser.parse_args()
 
-    opts.headers = {}
+    for comp in [ "fastmcp.experimental.utilities.openapi.director",
+                  "fastmcp.experimental.server.openapi.components",
+                  "fastmcp.experimental.server.openapi.server" ]:
+        get_logger(comp).setLevel(logging.DEBUG)
+
+    #logging.basicConfig(level=logging.DEBUG) # Configure root logger
 
     spec = load(opts.spec)
     client = Client(spec)

@@ -23,19 +23,9 @@ import asyncio
 import logging
 from fastmcp.server.middleware.logging import LoggingMiddleware
 from fastmcp.utilities.logging import get_logger
+# my own ...
 from FullRelayMiddleware import FullRelayMiddleware
-
-
-def load(path:str='/dev/stdin') -> Any:
-    """load json/yaml from file"""
-
-    with open(path, "r", encoding='utf-8') as fp:
-        c = fp.read()
-        try: # try json first
-            d = json.loads(c)
-        except: # if failed, try yaml
-            d = yaml.safe_load(c)
-        return d
+from utils import load
 
 async def test(cli, uri) -> Any:
     rtn = await cli.get(uri)
