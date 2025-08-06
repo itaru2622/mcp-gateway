@@ -15,9 +15,6 @@ img_node ?=node:22-bookworm
 inspector ?=npx @modelcontextprotocol/inspector
 ALLOWED_ORIGINS ?=http://${myIP}:${port_inspector}
 
-build:
-	docker build -t ${img} .
-
 bash:
 	docker run --rm -it \
 	-p ${port_mcp}:${port_mcp} \
