@@ -1,0 +1,20 @@
+#
+# mcp server configuration
+# '${...}' will be replaced by the value of corresponding environment variable at runtime.
+#
+mcpServers:
+  github-readonly:
+    transport: stdio
+    command: docker
+    args:
+      - run
+      - -i
+      - --rm
+      - -e
+      - GITHUB_PERSONAL_ACCESS_TOKEN
+      - ghcr.io/github/github-mcp-server
+      - stdio
+      - --read-only
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: ${GH_MCP_PAT}
+
