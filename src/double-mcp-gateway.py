@@ -56,6 +56,8 @@ if __name__ == '__main__':
     for comp in [ "fastmcp.experimental.utilities.openapi.director",
                   "fastmcp.experimental.server.openapi.components",
                   "fastmcp.experimental.server.openapi.server",
+                  "fastmcp.resources.resource_manager",
+                  "fastmcp.utilities.components.py",
                   "FullRelayMiddleware"]:
         get_logger(comp).setLevel(logging.DEBUG)
 
