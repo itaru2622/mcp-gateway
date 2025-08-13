@@ -19,9 +19,10 @@ if __name__ == '__main__':
     parser.add_argument('-e','--no-expandVars', action='store_false', dest='expandVars', help='flag for expanding environment vars')
     parser.add_argument('-m','--no-merge',      action='store_false', dest='merge',      help='flag to merge multiple docs into one in case of yaml')
     parser.add_argument('-s','--no-sortkeys',   action='store_false', dest='sort_keys',  help='flag to sort keys on yaml.dump()')
+    parser.add_argument('-c','--keep-comments', action='store_false', dest='removeComment',  help='flag to keep comment in json')
     opts = parser.parse_args()
     #print(f'{opts=}', file=sys.stderr)
     #exit(0)
 
-    d = load(path=opts.input, expandVars=opts.expandVars, merge=opts.merge)
+    d = load(path=opts.input, expandVars=opts.expandVars, merge=opts.merge, removeComment=opts.removeComment)
     print(yaml.dump(d, sort_keys=opts.sort_keys))

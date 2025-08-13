@@ -21,7 +21,7 @@ def load_(path: str='/dev/stdin', encoding: str='utf-8') -> Any:
                 continue
         return c
 
-def load(path: str='/dev/stdin', encoding: str='utf-8', expandVars: bool=True, merge: bool=True) -> Any:
+def load(path: str='/dev/stdin', encoding: str='utf-8', expandVars: bool=True, merge: bool=True, removeComment: bool=True) -> Any:
     """load content into json|yaml|text from file
 
     Args:
@@ -29,13 +29,18 @@ def load(path: str='/dev/stdin', encoding: str='utf-8', expandVars: bool=True, m
       - encoding (str): file encoding,
       - expandVars(bool): indicating flag if expand environment vars
       - merge (bool): indicating flag if merging multiple docs when yaml
+      - removeComment (bool): indicating flag if remove comment line(startswith #) from json
 
     Returns:
       Any
     """
 
     with open(path, "r", encoding=encoding) as fp:
-        c = fp.read()             # read as text
+        if removeComment in [True]:
+           tmp = fp.readlines()      # read in array
+           c = "".join([ l for l in tmp if l.startswith('#')==False ]) # remove comment
+        else:
+           c = fp.read()             # read as text
         if expandVars:
             c = os.path.expandvars(c) # expand environment variables i.e: '${HOME} => /home/user'
 
