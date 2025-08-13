@@ -57,7 +57,7 @@ if __name__ == '__main__':
                   "fastmcp.experimental.server.openapi.components",
                   "fastmcp.experimental.server.openapi.server",
                   "fastmcp.resources.resource_manager",
-                  "fastmcp.utilities.components.py",
+                  "fastmcp.utilities.components",
                   "FullRelayMiddleware"]:
         get_logger(comp).setLevel(logging.DEBUG)
 
