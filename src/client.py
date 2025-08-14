@@ -17,13 +17,13 @@ import argparse
 import sys
 import asyncio
 import logging
-from fastmcp.utilities.logging import get_logger
+from fastmcp.utilities.logging import get_logger, configure_logging as configFastMcpLogger
 from collections import defaultdict
 from fastapi.encoders import jsonable_encoder
 from itertools import cycle
 # my own ...
 from utils.conf import load
-
+from utils.logging import getAllLoggers, mkLoggingHandler, configLogger, dumpLoggers
 
 async def test(cli: Any, cmds:list[str]=["list_tools", "list_resources", "list_resource_templates", "list_prompts"] ) -> list[Any]:
 
@@ -54,16 +54,19 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--spec',      help='mcpServeers config to connect (json/yaml/text[url])', default='/dev/stdin')
-    parser.add_argument('-d', '--log_level', help='MCP log level',                      default='DEBUG')
     parser.add_argument('-c', '--cmds',      help='MCP Client commands to execute', nargs='*', default=["list_tools", "list_resources", "list_resource_templates", "list_prompts"])
+    parser.add_argument('-d', '--logLevel',  help='log level',                      default='DEBUG')
+    parser.add_argument('-f', '--logFile',   help='log file path',                  default='/dev/stderr')
     opts = parser.parse_args()
 
-    #for comp in [ 'fastmcp.experimental.utilities.openapi.director',
-    #              'fastmcp.experimental.server.openapi.components',
-    #              'fastmcp.experimental.server.openapi.server' ]:
-    #    get_logger(comp).setLevel(logging.DEBUG)
-    #
-    #logging.basicConfig(level=logging.DEBUG) # Configure root logger
+    configFastMcpLogger(level=opts.logLevel)
+    '''
+    # alternative log to file.
+    handlers = [ mkLoggingHandler(handler=logging.FileHandler, filename=opts.logFile) ]
+    for l in getAllLoggers():
+        configLogger(l, logLevel=opts.logLevel, handlers=handlers)
+    dumpLoggers()
+    '''
 
     spec = load(opts.spec)
     client = Client(spec)
