@@ -23,6 +23,8 @@ class FullRelayMiddleware(Middleware):
         heading = f'{self.__class__.__name__}::{fname}'
         logger.log(log_level, f'{heading} {msg}')
 
+    def onError(self, context: MiddlewareContext[Any], e: Exception) -> None:
+        logger.log(logging.ERROR, f'{context.method}  {type(e).__name__}: {e} message: {context.message}')
 
     async def on_message(
         self,
@@ -32,7 +34,11 @@ class FullRelayMiddleware(Middleware):
         #return await call_next(context)
         fname='on_message'
         self.logging(fname, f'starts: {context=}', log_level=logging.DEBUG)
-        result = await call_next(context)
+        try:
+            result = await call_next(context)
+        except Exception as e:
+            self.onError(context, e)
+            raise e
         self.logging(fname, f'ends: {context=} {result=}')
         return result
 
