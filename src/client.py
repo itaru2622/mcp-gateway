@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     loop = get_event_loop()
     resp = loop.run_until_complete(asyncio.gather( test(client, cmds=opts.cmds) ))[0]
-    loop.close()
+   #loop.close()
 
     # reshape responded data to make them easy to use.
     rtn = []
