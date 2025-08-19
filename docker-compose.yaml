@@ -20,6 +20,7 @@ services:
     volumes:
       - ${wDir}:${wDir}
       - /etc/resolv.conf:/etc/resolv.conf:ro
+    command: /lib/systemd/systemd
     working_dir: ${wDir}
     restart: always
 
