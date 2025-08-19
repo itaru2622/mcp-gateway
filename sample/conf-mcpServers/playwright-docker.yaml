@@ -18,3 +18,6 @@ mcpServers:
       - chromium
       - --output-dir
       - /tmp
+    env:
+      DOCKER_MCP_IN_CONTAINER: "1"
+      DOCKER_MCP_IN_DIND: "1"
