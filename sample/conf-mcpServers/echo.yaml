@@ -1,0 +1,15 @@
+#
+# mcp server configuration
+# '${...}' will be replaced by the value of corresponding environment variable at runtime.
+#
+mcpServers:
+  echo:
+    transport: stdio
+    command: fastmcp
+    args:
+      - run
+      - --server-spec
+      - ${wDir}/sample/mcp-servers/echo.py
+      - --transport
+      - stdio
+#     - http --host 0.0.0.0 --port 8890
