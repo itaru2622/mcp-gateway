@@ -74,9 +74,9 @@ if __name__ == '__main__':
     #exit(0)
 
     route_maps = [
-       RouteMap(methods=["GET"], pattern=r".*\{.*\}.*", mcp_type=MCPType.RESOURCE_TEMPLATE),
-       RouteMap(methods=["GET"], pattern=r".*",         mcp_type=MCPType.RESOURCE),
-#      RouteMap(mcp_type=MCPType.TOOL),
+#      RouteMap(methods=["GET"], pattern=r".*\{.*\}.*", mcp_type=MCPType.RESOURCE_TEMPLATE),
+#      RouteMap(methods=["GET"], pattern=r".*",         mcp_type=MCPType.RESOURCE),
+       RouteMap(mcp_type=MCPType.TOOL),
     ]
 
     mcp = FastMCP.from_openapi(spec, client=cli, route_maps=route_maps)
