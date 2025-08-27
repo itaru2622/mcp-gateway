@@ -43,7 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--baseURL',   help='baseURL to REST Server',                    default='')
     parser.add_argument('-a', '--token',     help='bearer token to REST server',               default=None)
     parser.add_argument('-t', '--transport', help='MCP server transport',                      default='http')
-    parser.add_argument('-p', '--port',      help='MCP server port',                           default=8888)
+    parser.add_argument('-p', '--port',      help='MCP server port',  type=int,                default=8888)
     parser.add_argument('-H', '--host',      help='MCP server host to listen',                 default='0.0.0.0')
     parser.add_argument('-l', '--path',      help='MCP server path to bind',                   default='/mcp')
     parser.add_argument('-d', '--log_level', help='MCP server log level',                      default='DEBUG')

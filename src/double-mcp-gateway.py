@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--spec',      help='backend MCP server config (json|yaml|url)', default='/dev/stdin')
     parser.add_argument('-t', '--transport', help='MCP server transport',                      default='http')
-    parser.add_argument('-p', '--port',      help='MCP server port',                           default=8889)
+    parser.add_argument('-p', '--port',      help='MCP server port', type=int,                 default=8889)
     parser.add_argument('-H', '--host',      help='MCP server host to listen',                 default='0.0.0.0')
     parser.add_argument('-l', '--path',      help='MCP server path to bind',                   default='/mcp')
     parser.add_argument('-d', '--log_level', help='MCP server log level',                      default='DEBUG')
