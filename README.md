@@ -1,7 +1,7 @@
-# mcp-gateway
+# simple-mcp-gateway
 
 provides:
- - codes for MCP Gateways (MCP<=>REST, MCP<=>MCP)
+ - codes for simple MCP Gateways (MCP<=>REST, MCP<=>MCP)
  - Sample codes for MCP Client to access MCP Gateway.
  - Containsers for exuting and testing
      - Runtime env       to execute MCP gateways
