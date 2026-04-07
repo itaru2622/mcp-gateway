@@ -6,7 +6,7 @@ cDir  ?=${wDir}/sample/conf-mcpServers
 myIP  ?=$(shell ip addr|grep 'inet '|grep -v '\.1/'|tr -s ' '|awk '{$$1=$$1};1'|cut -d ' ' -f 2|cut -d '/' -f 1|paste -sd "," -|sed s/addr://g)
 #myIP ?=192.168.1.2
 
-docker_network       ?=mcp-sandbox
+docker_network       ?=mcp-gateway
 port_mcpgateway      ?=8888-8892
 port_inspector       ?=3000
 port_inspector_proxy ?=3001
@@ -19,6 +19,9 @@ confs_yaml ?=$(shell find ${cDir} -type f | sort -f |  grep .yaml$$)
 
 bash: _mk_vars
 	${_envs} docker compose -f ./docker-compose.yaml exec mcp-gateway /bin/bash
+
+pull: docker-net-start _mk_vars
+	${_envs} docker compose -f ./docker-compose.yaml pull
 
 start: docker-net-start _mk_vars
 	${_envs} docker compose -f ./docker-compose.yaml up -d ${services}
@@ -39,6 +42,8 @@ docker-pull: _mk_vars
 catConf:
 	@awk 'FNR==1 && NR!=1 {print "---"}{print}' ${confs_yaml} | ./src/mergeYaml.py -e -s
 
+echo:
+	@echo "myIP: ${myIP}"
 
 # pack key=value pairs into _envs for easy docker compose ops
 _mk_vars:
