@@ -14,7 +14,7 @@
 #  note: original fastMCP supports backend MCP server with stdio transport, but this gateway doesn't support it yet.
 #
 
-from fastmcp import FastMCP
+from fastmcp.server import create_proxy
 from typing import Any
 import httpx
 import yaml
@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     #logging.basicConfig(level=logging.DEBUG) # Configure root logger
 
-    mcp = FastMCP.as_proxy(backend=spec, name='MCP to MCP gateway') # create instance as MCP<=>MCP proxy.
+    mcp = create_proxy(spec, name='MCP to MCP gateway') # create instance as MCP<=>MCP proxy.
     mcp.add_middleware(FullRelayMiddleware())
     '''
     logger = get_logger('fastmcp.server.middleware.logging.LoggingMiddleware')
